@@ -67,6 +67,7 @@ function read_dom () {
 ##### START #####
 STARTTIME=$( date +%s )
 
+DISPLAY=0
 while [ ${#} -gt 0 ]
 do
 	case ${1} in
@@ -215,7 +216,7 @@ if [ -e ${WORKINGDIR}/slowurls ]
 then
 	SLOWNUM=$( wc -l ${WORKINGDIR}/slowurls | awk -F" " '{ print $1 }' )
 	echo "- ${SLOWNUM} took longer than ${THRESHOLD} secs (${WORKINGDIR}/slowurls)"
-	if [ ${DISPLAY} = 1 ]
+	if [ ${DISPLAY} -eq 1 ]
 	then
 		echo "-----"
 		cat ${WORKINGDIR}/slowurls
@@ -229,7 +230,7 @@ if [ -e ${WORKINGDIR}/errorurls ]
 then
 	ERRORNUM=$( wc -l ${WORKINGDIR}/errorurls | awk -F" " '{ print $1 }' )
 	echo "- ${ERRORNUM} URLs did not return 200 (${WORKINGDIR}/errorurls)"
-	if [ ${DISPLAY} = 1 ]
+	if [ ${DISPLAY} -eq 1 ]
 	then
 		echo "-----"
 		cat ${WORKINGDIR}/errorurls
