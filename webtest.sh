@@ -123,7 +123,7 @@ fi
 echo
 echo ${0}
 echo
-echo "Process information"
+echo "Process Information"
 echo "- Date:" $( date --date="@${STARTTIME}" "+%Y/%m/%d %H:%M:%S" )
 echo "- Host: ${HOST}"
 echo "- Processes: ${PROCESSES}"
@@ -133,7 +133,7 @@ WORKINGDIR="${WORKINGDIR}/"$( date --date="@${STARTTIME}" "+%Y%m%d-%H%M%S" )
 echo "- Working Directory: ${WORKINGDIR}"
 if [ ${TYPE} = '--head' ]
 then
-	echo "- Fetching headers only"
+	echo "- Fetching only headers"
 fi
 echo
 
@@ -160,7 +160,7 @@ do
 		exit 0
 	fi
 	let 'COUNT+=1'
-	./getURL.sh ${URL} ${WORKINGDIR} ${THRESHOLD} &
+	./getURL.sh ${URL} ${WORKINGDIR} ${THRESHOLD} ${TYPE} &
 	RUNNINGPROCS=$( ps auxwww | grep getURL.sh | grep -v grep | wc -l | awk -F" " '{ print $1 }' )
 	until [ ${RUNNINGPROCS} -lt ${PROCESSES} ]
 	do
@@ -206,20 +206,20 @@ do
 done
 echo -en "                                                     \r"
 echo "Statistics"
-echo "- Processed ${COUNT} URLs in ${URLTIME} secs                    "
+echo "- Processed ${COUNT} URLs in ${URLTIME} secs (${WORKINGDIR}/processedurls)"
 
 if [ -e ${WORKINGDIR}/slowurls ]
 then
 	SLOWNUM=$( wc -l ${WORKINGDIR}/slowurls | awk -F" " '{ print $1 }' )
-	echo "- ${SLOWNUM} took longer than ${THRESHOLD} secs"
+	echo "- ${SLOWNUM} took longer than ${THRESHOLD} secs (${WORKINGDIR}/slowurls)"
 else
 	echo "- All pages returned in less than ${THRESHOLD} secs"
 fi
 
 if [ -e ${WORKINGDIR}/errorurls ]
 then
-	ERRORNUM=$( wc -l ${WORKINGDIR}/errorurls )
-	echo "- ${ERRORNUM} URLs did not return 200"
+	ERRORNUM=$( wc -l ${WORKINGDIR}/errorurls | awk -F" " '{ print $1 }' )
+	echo "- ${ERRORNUM} URLs did not return 200 (${WORKINGDIR}/errorurls)"
 else
 	echo "- All pages retrieved successfully"
 fi
