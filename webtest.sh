@@ -70,6 +70,9 @@ STARTTIME=$( date +%s )
 while [ ${#} -gt 0 ]
 do
 	case ${1} in
+	    "-d"|"--display") # cat slowurl and errorurl files to the command line (If they exist)
+			DISPLAY=1
+			;;
 		"-h"|"--host") # REQUIRED: Host to test
 			HOST=${2}
 			shift
@@ -212,6 +215,12 @@ if [ -e ${WORKINGDIR}/slowurls ]
 then
 	SLOWNUM=$( wc -l ${WORKINGDIR}/slowurls | awk -F" " '{ print $1 }' )
 	echo "- ${SLOWNUM} took longer than ${THRESHOLD} secs (${WORKINGDIR}/slowurls)"
+	if [ ${DISPLAY} = 1 ]
+	then
+		echo "-----"
+		cat ${WORKINGDIR}/slowurls
+		echo "-----"
+	fi
 else
 	echo "- All pages returned in less than ${THRESHOLD} secs"
 fi
@@ -220,6 +229,12 @@ if [ -e ${WORKINGDIR}/errorurls ]
 then
 	ERRORNUM=$( wc -l ${WORKINGDIR}/errorurls | awk -F" " '{ print $1 }' )
 	echo "- ${ERRORNUM} URLs did not return 200 (${WORKINGDIR}/errorurls)"
+	if [ ${DISPLAY} = 1 ]
+	then
+		echo "-----"
+		cat ${WORKINGDIR}/errorurls
+		echo "-----"
+	fi
 else
 	echo "- All pages retrieved successfully"
 fi
@@ -244,7 +259,7 @@ echo "- Median: ${MEDIAN} secs"
 TMP=$( cat ${URLTIMINGS} | sort | uniq -c | sort -rn | head -n 1 )
 MODE=$( echo ${TMP} | awk -F" " '{ print $2 }' )
 AMOUNT=$( echo ${TMP} | awk -F" " '{ print $1 }' )
-echo "- Mode: ${MODE} secs (${AMOUNT} occurences)"
+echo "- Mode: ${MODE} secs (${AMOUNT} occurrences)"
 echo "- Max: ${MAX} secs"
 echo "- Min: ${MIN} secs"
 echo
