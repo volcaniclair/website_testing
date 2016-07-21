@@ -244,7 +244,8 @@ echo
 TOTALVALUES=$( wc -l ${URLTIMINGS} | awk -F" " '{ print $1 }' )
 # Mean
 let 'MEAN=URLTIME/TOTALVALUES'
-echo "- Mean: ${MEAN} secs"
+AMOUNT=$( cat ${URLTIMINGS} | sort | uniq -c | sort -k 2 | grep -E '[0-9]* '${MEAN}'$' | awk -F" " '{ print $1 }' )
+echo "- Mean: ${MEAN} secs (${AMOUNT} occurrences)"
 
 # Median
 if [ ${TOTALVALUES}%2 ] # if odd, add 1
@@ -254,15 +255,18 @@ fi
 MEDIAN=0
 let 'TMP=TOTALVALUES/2'
 MEDIAN=$( tail -n+${TMP} ${URLTIMINGS} | head -n 1 )
-echo "- Median: ${MEDIAN} secs"
+AMOUNT=$( cat ${URLTIMINGS} | sort | uniq -c | sort -k 2 | grep -E '[0-9]* '${MEDIAN}'$' | awk -F" " '{ print $1 }' )
+echo "- Median: ${MEDIAN} secs (${AMOUNT} occurrences)"
 
 # Mode
 TMP=$( cat ${URLTIMINGS} | sort | uniq -c | sort -rn | head -n 1 )
 MODE=$( echo ${TMP} | awk -F" " '{ print $2 }' )
 AMOUNT=$( echo ${TMP} | awk -F" " '{ print $1 }' )
 echo "- Mode: ${MODE} secs (${AMOUNT} occurrences)"
-echo "- Max: ${MAX} secs"
-echo "- Min: ${MIN} secs"
+AMOUNT=$( cat ${URLTIMINGS} | sort | uniq -c | sort -k 2 | grep -E '[0-9]* '${MAX}'$' | awk -F" " '{ print $1 }' )
+echo "- Max: ${MAX} secs (${AMOUNT} occurrences)"
+AMOUNT=$( cat ${URLTIMINGS} | sort | uniq -c | sort -k 2 | grep -E '[0-9]* '${MIN}'$' | awk -F" " '{ print $1 }' )
+echo "- Min: ${MIN} secs (${AMOUNT} occurrences)"
 echo
 
 ENDTIME=$( date +%s )
