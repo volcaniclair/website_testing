@@ -74,6 +74,9 @@ do
 			HOST=${2}
 			shift
 			;;
+		"-o"|"--only-headers") # Only fetch headers
+			TYPE="--head"
+			;;
 		"-p"|"--processes") # Number of processes to run (Default: 5)
 			PROCESSES=${2}
 			shift
@@ -107,6 +110,11 @@ then
 	THRESHOLD=5
 fi
 
+if [ -z ${TYPE} ]
+then
+	TYPE="--get"
+fi
+
 if [ -z ${WORKINGDIR} ]
 then
 	WORKINGDIR="./tmp"
@@ -123,6 +131,10 @@ echo "- Threshold: ${THRESHOLD}"
 echo "- Failsafe Processes: ${FAILSAFEPROCS}"
 WORKINGDIR="${WORKINGDIR}/"$( date --date="@${STARTTIME}" "+%Y%m%d-%H%M%S" )
 echo "- Working Directory: ${WORKINGDIR}"
+if [ ${TYPE} = '--head' ]
+then
+	echo "- Fetching headers only"
+fi
 echo
 
 mkdir -p ${WORKINGDIR}
