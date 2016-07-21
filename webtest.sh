@@ -167,7 +167,16 @@ do
 		RUNNINGPROCS=$( ps auxwww | grep getURL.sh | grep -v grep | wc -l | awk -F" " '{ print $1 }' )
 		sleep 0.1
 	done
-	echo -en "- Processes: ${RUNNINGPROCS} - Processed ${COUNT} of ${URLTOTAL} URLs \r"
+	
+	ELAPSED=0
+	if [ -e ${WORKINGDIR}/processedurls ]
+	then
+		for VALUE in $( cat ${WORKINGDIR}/processedurls | awk -F" " '{ print $5 }' )
+		do
+			let 'ELAPSED+=VALUE'
+		done
+	fi
+	echo -en "- Processes: ${RUNNINGPROCS} - Processed ${COUNT} of ${URLTOTAL} URLs (${ELAPSED} secs)\r"
 done
 
 URLTIMINGS="${WORKINGDIR}/urltimings"
@@ -195,7 +204,7 @@ do
 	fi	
 	let 'URLTIME+=VALUE'
 done
-echo -en "                                           \r"
+echo -en "                                                     \r"
 echo "Statistics"
 echo "- Processed ${COUNT} URLs in ${URLTIME} secs                    "
 
