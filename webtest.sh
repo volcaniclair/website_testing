@@ -66,6 +66,8 @@ function read_dom () {
 
 ##### START #####
 STARTTIME=$( date +%s )
+STARTTIMEPRETTY=$( date "+%Y/%m/%d %H:%M:%S" )
+STARTTIMEFOLDER=$( date "+%Y-%m-%d_%H-%M-%S" )
 
 DISPLAY=0
 while [ ${#} -gt 0 ]
@@ -128,12 +130,12 @@ echo
 echo ${0}
 echo
 echo "Process Information"
-echo "- Date:" $( date --date="@${STARTTIME}" "+%Y/%m/%d %H:%M:%S" )
+echo "- Date: ${STARTTIMEPRETTY}"
 echo "- Host: ${HOST}"
 echo "- Processes: ${PROCESSES}"
 echo "- Threshold: ${THRESHOLD}"
 echo "- Failsafe Processes: ${FAILSAFEPROCS}"
-WORKINGDIR="${WORKINGDIR}/"$( date --date="@${STARTTIME}" "+%Y%m%d-%H%M%S" )
+WORKINGDIR="${WORKINGDIR}/${STARTTIMEFOLDER}"
 echo "- Working Directory: ${WORKINGDIR}"
 if [ ${TYPE} = '--head' ]
 then
