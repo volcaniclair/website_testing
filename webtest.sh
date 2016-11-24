@@ -144,6 +144,7 @@ echo "- Host: ${HOST}"
 echo "- Processes: ${PROCESSES}"
 echo "- Threshold: ${THRESHOLD}"
 echo "- Failsafe Processes: ${FAILSAFEPROCS}"
+echo "- Append Query: ${APPENDQUERY}"
 WORKINGDIR="${WORKINGDIR}/${STARTTIMEFOLDER}"
 echo "- Working Directory: ${WORKINGDIR}"
 if [ ${TYPE} = '--head' ]
