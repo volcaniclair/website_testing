@@ -95,6 +95,10 @@ do
 			WORKINGDIR=${2}
 			shift
 			;;
+		"-q"|"--query") # append to queries
+			APPENDQUERY=${2}
+			shift
+			;;
 	esac
 	shift
 done
@@ -124,6 +128,11 @@ fi
 if [ -z ${WORKINGDIR} ]
 then
 	WORKINGDIR="./tmp"
+fi
+
+if [ -z ${APPENDQUERY} ]
+then
+	APPENDQUERY=""
 fi
 
 echo
@@ -166,7 +175,7 @@ do
 		exit 0
 	fi
 	let 'COUNT+=1'
-	./getURL.sh ${URL} ${WORKINGDIR} ${THRESHOLD} ${TYPE} &
+	./getURL.sh ${URL} ${WORKINGDIR} ${THRESHOLD} ${TYPE} ${APPENDQUERY} &
 	RUNNINGPROCS=$( ps auxwww | grep getURL.sh | grep -v grep | wc -l | awk -F" " '{ print $1 }' )
 	until [ ${RUNNINGPROCS} -lt ${PROCESSES} ]
 	do

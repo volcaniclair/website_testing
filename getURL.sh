@@ -3,7 +3,7 @@
 # getURL.sh
 # ---------
 
-URL=${1}
+URL=${1}{$5}
 WORKINGDIR=${2}
 THRESHOLD=${3}
 TYPE=${4}
