@@ -1,5 +1,12 @@
 #!/bin/sh
 
+echo "$$" > /tmp/warm_cache.pid
+
+function finish {
+	rm /tmp/warm_cache.pid
+}
+trap finish EXIT
+
 PROC=5
 
 ./webtest.sh -h shop.3dtotal.com -d -p $PROC -q "?"
