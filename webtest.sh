@@ -95,6 +95,10 @@ do
 			WORKINGDIR=${2}
 			shift
 			;;
+		"-q"|"--query") # append to queries
+			APPENDQUERY=${2}
+			shift
+			;;
 	esac
 	shift
 done
@@ -126,6 +130,11 @@ then
 	WORKINGDIR="./tmp"
 fi
 
+if [ -z ${APPENDQUERY} ]
+then
+	APPENDQUERY=""
+fi
+
 echo
 echo ${0}
 echo
@@ -135,6 +144,7 @@ echo "- Host: ${HOST}"
 echo "- Processes: ${PROCESSES}"
 echo "- Threshold: ${THRESHOLD}"
 echo "- Failsafe Processes: ${FAILSAFEPROCS}"
+echo "- Append Query: ${APPENDQUERY}"
 WORKINGDIR="${WORKINGDIR}/${STARTTIMEFOLDER}"
 echo "- Working Directory: ${WORKINGDIR}"
 if [ ${TYPE} = '--head' ]
@@ -166,7 +176,7 @@ do
 		exit 0
 	fi
 	let 'COUNT+=1'
-	./getURL.sh ${URL} ${WORKINGDIR} ${THRESHOLD} ${TYPE} &
+	./getURL.sh ${URL} ${WORKINGDIR} ${THRESHOLD} ${TYPE} ${APPENDQUERY} &
 	RUNNINGPROCS=$( ps auxwww | grep getURL.sh | grep -v grep | wc -l | awk -F" " '{ print $1 }' )
 	until [ ${RUNNINGPROCS} -lt ${PROCESSES} ]
 	do
